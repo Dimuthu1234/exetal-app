@@ -2,7 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Exetal Customer API",
-        "version": "0.1"
+        "description": "Exetal customer API by Dimuthu",
+        "version": "1.0"
     },
     "paths": {
         "/": {
@@ -11,6 +12,24 @@
                 "responses": {
                     "default": {
                         "description": "Welcome page | Exetal customer"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "passport": {
+                "type": "apiKey",
+                "description": "Laravel passport oauth2 security.",
+                "in": "header",
+                "scheme": "https",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://localhost/oauth/authorize",
+                        "tokenUrl": "http://localhost/oauth/token",
+                        "refreshUrl": "http://localhost/token/refresh",
+                        "scopes": []
                     }
                 }
             }
