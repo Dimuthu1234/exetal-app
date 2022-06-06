@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Http\Requests\CustomerFormRequest;
+use Domain\Customer\Actions\CreateCustomerAction;
+use Domain\Customer\Actions\UpdateCustomerAction;
+use Domain\Customer\DataTransferObjects\CustomerFormData;
+use Domain\Customer\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Exception;
 
 class CustomerController extends Controller
 {
+    /**
+     * @return JsonResponse
+     */
+
     /**
      * @OA\Get(
      *      path="/api/customer",
@@ -42,10 +53,24 @@ class CustomerController extends Controller
      *   ),
      *  )
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return response()->json(Customer::all());
+        try {
+            return response()->json(
+                Customer::all(),
+                Response::HTTP_OK
+            );
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
+
+    /**
+     * create customer
+     * @param CustomerFormRequest $customerFormRequest
+     * @param CreateCustomerAction $createCustomerAction
+     * @return JsonResponse
+     */
 
     /**
      * @OA\Post(
@@ -119,17 +144,26 @@ class CustomerController extends Controller
      *      )
      * )
      */
-    public function store(Request $request)
-    {
-        $customer = Customer::create([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'age' => $request->age,
-            'dob' => $request->dob,
-            'email' => $request->email,
-        ]);
-
-        return response()->json($customer);
+    public function store(
+        CustomerFormRequest $customerFormRequest,
+        CreateCustomerAction $createCustomerAction
+    ): JsonResponse {
+        try {
+            return response()->json(
+                $createCustomerAction(
+                    new CustomerFormData(
+                        firstName: $customerFormRequest->firstName,
+                        lastName: $customerFormRequest->lastName,
+                        age: $customerFormRequest->age,
+                        dob: $customerFormRequest->dob,
+                        email: $customerFormRequest->email,
+                    )
+                ),
+                Response::HTTP_CREATED
+            );
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
 
     /**
@@ -176,16 +210,32 @@ class CustomerController extends Controller
      *   ),
      *  )
      */
-    public function show(Customer $customer)
-    {
-        return response()->json($customer);
+    public function show(
+        Customer $customer
+    ): JsonResponse {
+        try {
+            return response()->json(
+                $customer,
+                Response::HTTP_OK
+            );
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
+
+    /**
+     * update customer
+     * @param CustomerFormRequest $customerFormRequest
+     * @param UpdateCustomerAction $updateCustomerAction
+     * @param Customer $customer
+     * @return JsonResponse
+     */
 
     /**
      * @OA\Put (
      *      path="/api/customer/{id}",
      *      operationId="updateCustomerById",
-     *      tags={"update-customer-by-id"},
+     *      tags={"Update-customer-by-id"},
      *
      *      @OA\Parameter(
      *      name="id",
@@ -238,7 +288,7 @@ class CustomerController extends Controller
      *      summary="Update Customer by id",
      *      description="Update a customer by id",
      *      @OA\Response(
-     *          response=200,
+     *          response=201,
      *          description="Successful operation",
      *          @OA\MediaType(
      *           mediaType="application/json",
@@ -262,18 +312,35 @@ class CustomerController extends Controller
      *   ),
      *  )
      */
-    public function update(Request $request, Customer $customer)
-    {
-        $customer->update([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'age' => $request->age,
-            'dob' => $request->dob,
-            'email' => $request->email,
-        ]);
-
-        return response()->json($customer);
+    public function update(
+        CustomerFormRequest $customerFormRequest,
+        UpdateCustomerAction $updateCustomerAction,
+        Customer $customer
+    ): JsonResponse {
+        try {
+            return response()->json(
+                $updateCustomerAction(
+                    new CustomerFormData(
+                        firstName: $customerFormRequest->firstName,
+                        lastName: $customerFormRequest->lastName,
+                        age: $customerFormRequest->age,
+                        dob: $customerFormRequest->dob,
+                        email: $customerFormRequest->email,
+                    ),
+                    $customer
+                ),
+                Response::HTTP_CREATED
+            );
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
+
+    /**
+     * customer delete
+     * @param Customer $customer
+     * @return JsonResponse
+     */
 
     /**
      * @OA\Delete (
@@ -319,10 +386,17 @@ class CustomerController extends Controller
      *   ),
      *  )
      */
-    public function destroy(Customer $customer)
-    {
-        $customer->delete();
-
-        return response()->json(['Customer deleted successfully']);
+    public function destroy(
+        Customer $customer
+    ): JsonResponse {
+        try {
+            $customer->delete();
+            return response()->json(
+                ['Customer deleted successfully'],
+                Response::HTTP_OK
+            );
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()]);
+        }
     }
 }

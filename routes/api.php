@@ -17,7 +17,7 @@ use App\Http\Controllers\CustomerController;
 |
 */
 
-Route::model('customer', 'App\Models\Customer');
+Route::model('customer', 'Domain\Customer\Models\Customer');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -169,7 +169,7 @@
             },
             "put": {
                 "tags": [
-                    "update-customer-by-id"
+                    "Update-customer-by-id"
                 ],
                 "summary": "Update Customer by id",
                 "description": "Update a customer by id",
@@ -220,7 +220,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {}
