@@ -61,7 +61,22 @@ return [
              * Middleware allows to prevent unexpected access to API documentation
             */
             'middleware' => [
-                'api' => [],
+                'api' => [
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Edit to set the api's title
+                    |--------------------------------------------------------------------------
+                    */
+                    \App\Http\Middleware\EncryptCookies::class,
+                    \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+                    \Illuminate\Session\Middleware\StartSession::class,
+                    \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+                    \App\Http\Middleware\VerifyCsrfToken::class,
+                    \Illuminate\Routing\Middleware\SubstituteBindings::class,
+                    \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+                    'auth',
+//                    'title' => 'Integration Swagger in Laravel with Passport Auth',
+                ],
                 'asset' => [],
                 'docs' => [],
                 'oauth2_callback' => [],
@@ -148,7 +163,7 @@ return [
         'securityDefinitions' => [
             'securitySchemes' => [
                 'passport' => [ // Unique name of security
-                    'type' => 'apiKey', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+                    'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
                     'description' => 'Laravel passport oauth2 security.',
                     'in' => 'header',
                     'scheme' => 'https',
@@ -295,7 +310,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8000'),
         ],
     ],
 ];
