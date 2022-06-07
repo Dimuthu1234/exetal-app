@@ -38,8 +38,8 @@
                                             <td>{{ $customer->age }}</td>
                                             <td>{{ $customer->dob }}</td>
                                             <td>{{ $customer->email }}</td>
-                                            <td>Edit</td>
-                                            <td>Delete</td>
+                                            <td><button class="btn btn-secondary">Edit</button></td>
+                                            <td><button class="btn btn-secondary">Delete</button></td>
                                         </tr>
                                         @endforeach
                                         </tbody>
