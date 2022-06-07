@@ -5,16 +5,19 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+        <testsuite name="App">
+            <directory suffix="Test.php">./tests/app</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+        <testsuite name="Domain">
+            <directory suffix="Test.php">./tests/domain</directory>
+        </testsuite>
+        <testsuite name="Support">
+            <directory suffix="Test.php">./tests/support</directory>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./src</directory>
         </include>
     </coverage>
     <php>

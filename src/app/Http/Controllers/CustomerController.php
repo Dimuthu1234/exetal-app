@@ -7,7 +7,6 @@ use Domain\Customer\Actions\CreateCustomerAction;
 use Domain\Customer\Actions\UpdateCustomerAction;
 use Domain\Customer\DataTransferObjects\CustomerFormData;
 use Domain\Customer\Models\Customer;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Exception;
